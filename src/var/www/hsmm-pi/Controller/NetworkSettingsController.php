@@ -153,7 +153,7 @@ no-dhcp-interface=" . $network_setting['NetworkSetting']['wifi_adapter_name'];
 		$lan_dhcp_start = null;
 		if (0 == strcmp($network_setting['NetworkSetting']['lan_mode'], 'NAT')) {
 			$lan_ip_address = $network_setting['NetworkSetting']['lan_ip_address'];
-			$ip_parts = split("\.", $lan_ip_address);
+			$ip_parts = explode(".", $lan_ip_address);
 			$lan_dhcp_start = $ip_parts[0] . '.' . $ip_parts[1] . '.' . $ip_parts[2] . '.' . $network_setting['NetworkSetting']['lan_dhcp_start'];
 			$lan_dhcp_end = $ip_parts[0] . '.' . $ip_parts[1] . '.' . $ip_parts[2] . '.' . $network_setting['NetworkSetting']['lan_dhcp_end'];
 		} else if (0 == strcmp($network_setting['NetworkSetting']['lan_mode'], 'Direct')) {
