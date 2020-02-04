@@ -4,7 +4,7 @@
 # File: install.sh
 # Authors: Scott Kidder, Clayton Smith
 # Purpose: This script will configure a newly-imaged Raspberry Pi running
-#   Raspbian Jessie Lite with the dependencies and HSMM-Pi components.
+#   Raspbian Stretch Lite with the dependencies and HSMM-Pi components.
 #
 
 if [ "$(id -u)" = "0" ]
@@ -22,10 +22,10 @@ sudo apt-get update
 # Install Web Server deps
 sudo apt-get install -y \
     apache2 \
-    php5 \
+    php \
     sqlite \
     php-pear \
-    php5-sqlite  \
+    php-sqlite  \
     dnsmasq \
     sysv-rc-conf \
     make \
@@ -34,7 +34,7 @@ sudo apt-get install -y \
     gpsd \
     libnet-gpsd3-perl \
     ntp \
-    php5-mcrypt \
+    php-mcrypt \
     olsrd
 
 # Enabe php5-mcrypt
