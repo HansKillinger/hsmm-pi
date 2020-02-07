@@ -68,7 +68,7 @@ sudo pear install cakephp/CakePHP-2.8.3
 
 # Checkout the HSMM-Pi project
 if [ ! -e ${PROJECT_HOME} ]; then
-    git clone https://github.com/cbegg50/hsmm-pi.git
+    git clone https://github.com/compuvin/hsmm-pi.git
 else
     cd ${PROJECT_HOME}
     git pull
@@ -131,13 +131,13 @@ if [ ! -e /var/data/hsmm-pi/hsmm-pi.sqlite ]; then
 fi
 
 # enable port 8080 on the Apache server
-OUTPUT=`grep "Listen 8080" /etc/apache2/ports.conf`
+OUTPUT=$(grep "Listen 8080" /etc/apache2/ports.conf)
 if [ -z "$OUTPUT" ]; then
     sudo bash -c "echo 'Listen 8080' >> /etc/apache2/ports.conf"
 fi
 
 # allow the www-data user to run the WiFi scanning program, iwlist
-OUTPUT=`sudo grep "www-data" /etc/sudoers`
+OUTPUT=$(sudo grep "www-data" /etc/sudoers)
 if [ -z "$OUTPUT" ]; then
     sudo bash -c "echo 'www-data ALL=(ALL) NOPASSWD: /sbin/iwlist' >> /etc/sudoers"
     sudo bash -c "echo 'www-data ALL=(ALL) NOPASSWD: /sbin/shutdown' >> /etc/sudoers"
