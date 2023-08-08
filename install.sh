@@ -23,9 +23,9 @@ sudo apt-get update
 sudo apt-get install -y \
     apache2 \
     php \
-    sqlite \
+    sqlite3 \
     php-pear \
-    php-sqlite  \
+    php-sqlite3  \
     dnsmasq \
     sysv-rc-conf \
     make \
@@ -38,7 +38,7 @@ sudo apt-get install -y \
     olsrd
 
 # Enabe php5-mcrypt
-sudo php5enmod mcrypt
+sudo phpenmod mcrypt
 
 # Remove ifplugd if present, as it interferes with olsrd
 sudo apt-get remove -y ifplugd
@@ -68,7 +68,7 @@ sudo pear install cakephp/CakePHP-2.8.3
 
 # Checkout the HSMM-Pi project
 if [ ! -e ${PROJECT_HOME} ]; then
-    git clone https://github.com/compuvin/hsmm-pi.git
+    git clone https://github.com/HansKillinger/hsmm-pi.git
 else
     cd ${PROJECT_HOME}
     git pull
