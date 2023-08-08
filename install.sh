@@ -35,9 +35,10 @@ sudo apt-get install -y \
     libnet-gpsd3-perl \
     ntp \
     php-mcrypt \
-    olsrd
+    
+#sudo apt install -y olsrd
 
-# Enabe php5-mcrypt
+# Enabe php-mcrypt
 sudo phpenmod mcrypt
 
 # Remove ifplugd if present, as it interferes with olsrd
@@ -155,23 +156,24 @@ sudo service apache2 restart
 
 # Download and build olsrd
 cd /var/tmp
-#git clone https://github.com/OLSR/olsrd.git
-#git clone --branch release-0.6.8.1 --depth 1 https://github.com/OLSR/olsrd.git
-#cd olsrd
+
+git clone https://github.com/OLSR/olsrd.git
+git clone --branch release-0.6.8.1 --depth 1 https://github.com/OLSR/olsrd.git
+cd olsrd
 
 # patch the Makefile configuration to produce position-independent code (PIC)
 # applies only to ARM architecture (i.e. Beaglebone/Beagleboard)
-#if uname -m | grep -q arm -; then
-#  printf "CFLAGS +=\t-fPIC\n" >> Makefile.inc
-#fi
+if uname -m | grep -q arm -; then
+  printf "CFLAGS +=\t-fPIC\n" >> Makefile.inc
+fi
 
 # build the OLSRD core
-#make
-#sudo make install
+make
+sudo make install
 
 # build the OLSRD plugins (libs)
-#make libs
-#sudo make libs_install
+make libs
+sudo make libs_install
 
 sudo mkdir -p /etc/olsrd
 sudo chgrp -R www-data /etc/olsrd
