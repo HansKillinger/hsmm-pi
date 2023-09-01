@@ -17,7 +17,7 @@ PROJECT_HOME=${HOME}/hsmm-pi
 cd ${HOME}
 
 # Update list of packages
-sudo apt-get update
+#sudo apt-get update
 
 # Install Web Server deps
 sudo apt-get install -y \
@@ -28,15 +28,23 @@ sudo apt-get install -y \
     php-sqlite3  \
     dnsmasq \
     sysv-rc-conf \
-    make \
     bison \
     flex \
     gpsd \
     libnet-gpsd3-perl \
     ntp \
-    php-mcrypt \
-    
-#sudo apt install -y olsrd
+    gcc \
+    make \
+    autoconf \
+    libc-dev \
+    pkg-config \
+    php7.3-dev \
+    libmcrypt-dev
+
+# Build php-mcrypt from source
+sudo pecl install --nodeps mcrypt-snapshot
+sudo bash -c "echo extension=mcrypt.so > /etc/php/7.3/mods-available/mcrypt.ini"
+sudo service apache2 restart
 
 # Enabe php-mcrypt
 sudo phpenmod mcrypt
@@ -44,57 +52,22 @@ sudo phpenmod mcrypt
 # Remove ifplugd if present, as it interferes with olsrd
 sudo apt-get remove -y ifplugd
 
-
-# On Ubuntu 13.04 systems this file is a symbolic link to a file in the /run/
-# directory structure.  Remove the symbolic link and replace with a file that
-# can be managed by HSMM-Pi.
-if [ -L /etc/resolv.conf ]; then
-    rm -f /etc/resolv.conf
-    touch /etc/resolv.conf
-fi
-
+sudo rm -f /etc/resolv.conf
+sudo touch /etc/resolv.conf
 sudo bash -c "echo 'nameserver 8.8.8.8' > /etc/resolv.conf"
 sudo chgrp www-data /etc/resolv.conf
 sudo chmod g+w /etc/resolv.conf
 
 sudo bash -c "echo '# This file will be overwritten' > /etc/ethers"
 
-# Install cakephp with GitHub
-#git clone -b 2.x git://github.com/cakephp/cakephp.git ~/projects/
-#sudo mv -f ~/projects/lib/Cake /usr/share/php
-#rm -rf ~/projects
 # Install cakephp with pear
 sudo pear channel-discover pear.cakephp.org
-sudo pear install cakephp/CakePHP-2.8.3
+sudo pear install cakephp/CakePHP-2.10.9
 
-# Checkout the HSMM-Pi project
-if [ ! -e ${PROJECT_HOME} ]; then
-    git clone https://github.com/HansKillinger/hsmm-pi.git
-else
-    cd ${PROJECT_HOME}
-    git pull
-fi
-
-# Set symlink to webapp
-if [ -d /var/www/html ]; then
-    cd /var/www/html
-else
-    cd /var/www
-fi
-if [ ! -d hsmm-pi ]; then
-    sudo ln -s ${PROJECT_HOME}/src/var/www/hsmm-pi
-fi
+cd /var/www/html
 sudo rm -f index.html
 sudo ln -s ${PROJECT_HOME}/src/var/www/index.html
-
-#cd ${PROJECT_HOME}
-#php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-#php -r "if (hash_file('SHA384', 'composer-setup.php') === '070854512ef404f16bac87071a6db9fd9721da1684cd4589b1196c3faf71b9a2682e2311b36a5079825e155ac7ce150d') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
-#php composer-setup.php
-#php -r "unlink('composer-setup.php');"
-#php composer.phar install
-#sudo mv Vendor/cakephp/cakephp/lib/Cake /usr/share/php
-#rm -rf Vendor composer.phar composer.lock
+sudo ln -s ${PROJECT_HOME}/src/var/www/hsmm-pi/
 
 cd ${PROJECT_HOME}/src/var/www/hsmm-pi
 
@@ -154,26 +127,7 @@ elif [ -d /etc/apache2/conf-available ]; then
 fi
 sudo service apache2 restart
 
-# Download and build olsrd
-cd /var/tmp
-
-git clone https://github.com/OLSR/olsrd.git
-git clone --branch release-0.6.8.1 --depth 1 https://github.com/OLSR/olsrd.git
-cd olsrd
-
-# patch the Makefile configuration to produce position-independent code (PIC)
-# applies only to ARM architecture (i.e. Beaglebone/Beagleboard)
-if uname -m | grep -q arm -; then
-  printf "CFLAGS +=\t-fPIC\n" >> Makefile.inc
-fi
-
-# build the OLSRD core
-make
-sudo make install
-
-# build the OLSRD plugins (libs)
-make libs
-sudo make libs_install
+sudo apt install -y olsrd
 
 sudo mkdir -p /etc/olsrd
 sudo chgrp -R www-data /etc/olsrd
