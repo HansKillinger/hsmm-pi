@@ -2,9 +2,9 @@
 
 #
 # File: install.sh
-# Authors: Scott Kidder, Clayton Smith
+# Authors: Scott Kidder, Clayton Smith, Bob Lipsey(KD9YQK)
 # Purpose: This script will configure a newly-imaged Raspberry Pi running
-#   Raspbian Stretch Lite with the dependencies and HSMM-Pi components.
+#   Raspbian Buster Lite with the dependencies and HSMM-Pi components.
 #
 
 if [ "$(id -u)" = "0" ]
