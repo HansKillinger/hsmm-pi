@@ -18,7 +18,7 @@ class NetworkSettingsController extends AppController {
 				$location = $this->get_location();
 
 				$this->render_olsrd_config($latest_network_setting, $network_services, 
-							   $dhcp_reservatins, $location);
+							   $dhcp_reservations, $location);
 				$this->render_rclocal_config($latest_network_setting, $network_services);
 				$this->render_network_interfaces_config($latest_network_setting);
 				$this->render_dnsmasq_config($latest_network_setting);
