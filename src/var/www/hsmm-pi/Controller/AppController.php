@@ -292,7 +292,7 @@ LoadPlugin \"olsrd_dyn_gw_plain.so.0.4\"
 				$olsrd_secure_block,
 				$olsrd_gateway,
 				$olsrd_network_services,
-				$this->olsrd_dhcp_reservations),
+				$olsrd_dhcp_reservations),
 			$olsrd_conf);
 
 		file_put_contents('/etc/olsrd/olsrd.conf', $olsrd_conf_output);
