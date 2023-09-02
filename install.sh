@@ -62,7 +62,9 @@ sudo bash -c "echo '# This file will be overwritten' > /etc/ethers"
 
 # Install cakephp with pear
 sudo pear channel-discover pear.cakephp.org
-sudo pear install cakephp/CakePHP-2.10.9
+#sudo pear install cakephp/CakePHP-2.10.9
+sudo pear install cakephp/CakePHP-2.10.13
+
 
 cd /var/www/html
 sudo rm -f index.html
