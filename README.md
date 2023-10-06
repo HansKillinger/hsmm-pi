@@ -2,13 +2,16 @@ HSMM-Pi
 =======
 
 Original project created by <a href="https://github.com/urlgrey">urlgrey</a>. This version includes improvements from <a href="https://github.com/cbegg50/hsmm-pi">cbegg50</a> and is updated for PHP v7.
-Updated install instructions by HansKillinger
+
+Updated to Raspberry Pi OS (Buster) by KD9YQK
 -------
 
 Updated Instructions
 --------------
 
-todo
+Updated to use Raspberry Pi OS Buster Lite since Jessie and Sketch are no longer supported; making it difficult to find dependancies. Migrated code to use a newer versions of dependancies. Fixed some errors in the original code as well.
+
+KD9YQK
 
 -------
 
@@ -26,7 +29,7 @@ The project consists of a PHP web application that is used to configure and moni
 
 The HSMM-Pi project is designed to run on Raspbian systems.  Rather than providing an OS image for HSMM-Pi, I've instead created an installation script that will transform a newly-imaged host into an HSMM-Pi node.  This has several benefits:
 
- * Greater transparency:  You can see exactly which changes are made to the base system by looking at the [install shell script](https://github.com/urlgrey/hsmm-pi/blob/master/install.sh).
+ * Greater transparency:  You can see exactly which changes are made to the base system by looking at the [install shell script](https://github.com/HansKillinger/hsmm-pi/blob/master/install.sh).
  * Easier to port to more platforms: Any platform that runs the supported Raspbian / Debian releases ought to be capable of running HSMM-Pi
  * Easier to host:  I only need to post the installation / update scripts and webapp files on Github and it's done.
  * Easier to seek support: Raspbian is widely used and supported, no need to introduce another customization.
@@ -72,7 +75,7 @@ I've done all of my testing with N150 USB wifi adapters that use the Ralink 5370
 Raspberry Pi Installation
 =========================
 
-1. Download the [Raspbian Jessie](https://downloads.raspberrypi.org/raspbian_latest) or [Raspbian Jessie Lite](https://downloads.raspberrypi.org/raspbian_lite_latest) disk image. The Lite image is suitable for headless installations as it omits the graphical interface, web browser, etc.
+1. Download the [Raspberry Pi OS Buster](https://www.raspberrypi.com/software/operating-systems/#raspberry-pi-os-legacy) disk image. The Lite image is suitable for headless installations as it omits the graphical interface, web browser, etc.
 1. Write the image to an SD memory card.  This involves formatting the SD card; I recommend the steps described at http://elinux.org/RPi_Easy_SD_Card_Setup
 1. Insert the card into a Raspberry Pi
 1. Connect the wired Ethernet port on the Pi to a network with Internet access
@@ -88,7 +91,7 @@ Raspberry Pi Installation
 
         sudo apt-get update
         sudo apt-get install -y git
-        git clone https://github.com/urlgrey/hsmm-pi.git
+        git clone https://github.com/KansKillinger/hsmm-pi.git
         cd hsmm-pi
         sh install.sh
 1. Login to the web application on the Pi:
@@ -97,57 +100,6 @@ http://(wired Ethernet IP of the node):8080/
 1. Change the password for HSMM-Pi
 1. Configure as either an Internal or Gateway node
 
-
-BeagleBone Black Installation
-=============================
-
-1. Download the latest BeagleBone Black Ubuntu 12.04 image: http://www.armhf.com/index.php/boards/beaglebone-black/#precise
-1. Write the image to an SD memory card using the steps on the page referenced in the previous step
-1. Insert the SD card into a BeagleBone Black board
-1. Apply power to the BeagleBone Black
-1. Login to the BeagleBone Black through an SSH session or the console using the 'ubuntu' account
-1. Transfer the image to the running BeagleBone Black using SCP
-1. Write the image to the eMMC flash memory using the steps mentioned in the first step here.
-1. Wait for all 4 LEDs to go solid (could take several minutes)
-1. Shutdown the Beaglbone Black (sudo /sbin/init 0)
-1. Remove the memory card from the BeagleBone Black
-1. Apply power to the BeagleBone Black
-1. Login to the BeagleBone Black through an SSH session or the console using the 'ubuntu' account
-1. Change the password for the 'ubuntu' account
-1. Install the development tools necessary to build OLSRD and retrieve the HSMM-Pi project:
-
-        sudo apt-get upgrade
-        sudo apt-get install make gcc git
-1. If installing over an SSH connection, then I recommend you install 'screen' (sudo apt-get install screen) to ensure that the installation script is not stopped prematurely if you lose connectivity.  This is optional, but I highly recommend using screen if installing over the network.  You can find more info on screen here: http://linux.die.net/man/1/screen
-1. Run the following commands to download the HSMM-Pi project and install
-
-        git clone https://github.com/urlgrey/hsmm-pi.git
-        cd hsmm-pi
-        sh install.sh
-1. Login to the web application:
-http://(wired Ethernet IP of the node):8080/
-1. Access the Admin account using the 'admin' username and 'changeme' password.
-1. Change the password for HSMM-Pi
-1. Configure as either an Internal or Gateway node
-
-
-
-Upgrade Steps
-=============
-This is experimental, and you should fall back to a fresh installation if things aren't functioning as you'd expect.  This is supported only on the HEAD of the master branch at this time.
-
-1. Login to the host using SSH or the console
-1. Run the following commands to upgrade:
-
-        cd ~/hsmm-pi
-        git pull
-        sh install.sh
-1. Access the web UI and check the configuration.  Save the Network and Location settings, even if no changes are needed.
-1. If the save operation fails, then you might need to replace the SQLite database file due to database schema changes.  Run the following command:
-
-        cd ~/hsmm-pi/
-        sudo cp src/var/data/hsmm-pi/hsmm-pi.sqlite /var/data/hsmm-pi/
-1. Repeat the step of reviewing and saving the configuration through the web UI.
 
 Internal Mesh Node Configuration
 ================================
